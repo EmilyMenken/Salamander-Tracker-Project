@@ -1,15 +1,16 @@
 
-export default function Header(){
+export default function Color(){
 
-    
+
     return(
- 
+
 
         <div>
         
         
         </div>
 
-    )
+    )   
+
 
 }
