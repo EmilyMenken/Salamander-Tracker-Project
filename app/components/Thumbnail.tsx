@@ -1,15 +1,18 @@
+"use client";
 
-export default function Thumbnail(){
+import { useEffect, useState } from "react";
 
+export default function Thumbnail() {
+  const [thumbnail, setThumbnail] = useState<string | null>(null);
 
-    return(
+  useEffect(() => {
+    const url = "http://localhost:3000/api/thumbnail/ensantina.mp4";
+    setThumbnail(url);
+  }, []);
 
-
-        <div>
-        
-        
-        </div>
-
-    )   
-
+  return (
+    <div>
+      {thumbnail && <img src={thumbnail} />}
+    </div>
+  );
 }
