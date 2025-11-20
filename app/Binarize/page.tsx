@@ -1,47 +1,57 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import Color from "../components/Color";
 import Thumbnail from "../components/Thumbnail";
 
+type Video = {
+  id: string;
+  name: string;
+  url: string;
+};
+
 export default function BinarizePage() {
   const searchParams = useSearchParams();
-  const router = useRouter();
-
   const videoId = searchParams.get("videoId");
 
+  const [videos, setVideos] = useState<Video[]>([]);
+  const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
   const [color, setColor] = useState("#ff0000");
   const [threshold, setThreshold] = useState(100);
 
-  const handleColorChange = useCallback((c: string, t: number) => {
-    setColor(c);
-    setThreshold(t);
+  // Load videos from sessionStorage
+  useEffect(() => {
+    const stored = sessionStorage.getItem("videos");
+    if (stored) setVideos(JSON.parse(stored));
   }, []);
 
-  const handleContinue = () => {
-    if (!videoId) return;
-    router.push(`/process?videoId=${videoId}`);
-  };
+  // Find selected video
+  useEffect(() => {
+    if (!videoId || videos.length === 0) return;
+    const vid = videos.find(v => v.id === videoId) || null;
+    setSelectedVideo(vid);
+  }, [videoId, videos]);
 
-  if (!videoId) {
-    return <div>No video selected.</div>;
-  }
+  if (!selectedVideo) return <div>No video selected</div>;
 
   return (
     <div>
-      <Color onChange={handleColorChange} />
+      <h1>Binarize Video</h1>
+
+      <Color
+        color={color}
+        threshold={threshold}
+        onColorChange={setColor}
+        onThresholdChange={setThreshold}
+      />
 
       <Thumbnail
-        videoId={videoId}
+        videos={videos}
+        selectedVideoId={selectedVideo.id}
         color={color}
         threshold={threshold}
       />
-
-      <button onClick={handleContinue}>
-        Continue
-      </button>
     </div>
   );
 }

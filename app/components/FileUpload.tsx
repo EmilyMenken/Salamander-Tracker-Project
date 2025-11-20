@@ -10,6 +10,11 @@ export default function FileUpload({ onAdd }: { onAdd: (file: File) => void }) {
 
     onAdd(file);
     setFile(null);
+
+    // Save videos to sessionStorage for other page access
+    const stored = sessionStorage.getItem("videos");
+    const currentVideos = stored ? JSON.parse(stored) : [];
+    sessionStorage.setItem("videos", JSON.stringify([...currentVideos, { id: crypto.randomUUID(), name: file.name, url: URL.createObjectURL(file) }]));
   }
 
   return (

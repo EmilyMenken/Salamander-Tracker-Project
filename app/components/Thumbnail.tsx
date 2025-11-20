@@ -14,16 +14,17 @@ export default function Thumbnail({
   threshold,
 }: {
   videos: Video[];
-  selectedVideoId: string | null;
+  selectedVideoId: string;
   color: string;
   threshold: number;
 }) {
   const [original, setOriginal] = useState<string | null>(null);
   const [binarized, setBinarized] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const selectedVideo = videos.find(v => v.id === selectedVideoId);
 
-  // Capture first frame of video as original thumbnail
+  // Capture first frame
   useEffect(() => {
     if (!selectedVideo) {
       setOriginal(null);
@@ -52,51 +53,32 @@ export default function Thumbnail({
     });
   }, [selectedVideo]);
 
-  // Generate binarized thumbnail from API
+  // Generate binarized thumbnail
   useEffect(() => {
     if (!selectedVideo) {
       setBinarized(null);
       return;
     }
-
-    const url = `http://localhost:3000/api/binarize/${selectedVideo.name}?color=${encodeURIComponent(
-      color
-    )}&threshold=${threshold}`;
-
+    setLoading(true);
+    const url = `http://localhost:3000/api/binarize/${selectedVideo.name}?color=${encodeURIComponent(color)}&threshold=${threshold}`;
     setBinarized(url);
+    setTimeout(() => setLoading(false), 200); // simulate loading
   }, [selectedVideo, color, threshold]);
 
   return (
-    <div>
-      {/* Original thumbnail */}
+    <div style={{ display: "flex", gap: "20px", alignItems: "flex-start" }}>
       <div>
         {original ? (
           <img src={original} width={300} alt="Original thumbnail" />
         ) : (
-          <div
-            style={{
-              width: 300,
-              height: 200,
-              border: "1px solid #ccc",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+          <div style={{ width: 300, height: 200, border: "1px solid #ccc", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <p>No video selected</p>
           </div>
         )}
       </div>
 
-      {/* Binarized thumbnail */}
       <div>
-        {binarized ? (
-          <img src={binarized} width={300} alt="Binarized thumbnail" />
-        ) : (
-          <div>
-            <p>No binarized preview</p>
-          </div>
-        )}
+        {loading ? <p>Loading binarized thumbnail...</p> : <img src={binarized || ""} width={300} alt="Binarized thumbnail" />}
       </div>
     </div>
   );

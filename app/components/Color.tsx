@@ -15,7 +15,6 @@ export default function Color({
   onColorChange,
   onThresholdChange
 }: ColorProps) {
-
   return (
     <div>
       <HexColorPicker color={color} onChange={onColorChange} />
