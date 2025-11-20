@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import Color from "../Binarize/Color";
+import Color from "./Color";
 
 type Video = {
   id: string;

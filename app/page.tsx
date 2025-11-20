@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import VideoList from "./components/VideoList";
-import Thumbnail from "./components/Binarize/Thumbnail";
-import JobStatus from "./components/Process/JobStatus";
-import Process from "./components/Process/Process";
+import Thumbnail from "./components/Thumbnail";
+import JobStatus from "./components/JobStatus";
+import Process from "./components/Process";
 import FileUpload from "./components/FileUpload";
 
 type Video = {

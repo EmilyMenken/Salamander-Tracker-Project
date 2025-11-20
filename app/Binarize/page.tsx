@@ -1,8 +1,7 @@
 "use client";
-
 import { useState } from "react";
-import Color from "./Color";
-import Thumbnail from "./Thumbnail";
+import Color from "../components/Color";
+import Thumbnail from "../components/Thumbnail";
 
 export default function BinarizePage() {
   const [color, setColor] = useState("#ff0000");
@@ -10,14 +9,15 @@ export default function BinarizePage() {
 
   return (
     <div>
-      <Color 
+      <Color
         color={color}
         threshold={threshold}
         onColorChange={setColor}
         onThresholdChange={setThreshold}
       />
-
-      <Thumbnail 
+      <Thumbnail
+        videos={videos}
+        selectedVideoId={selectedVideoId}
         color={color}
         threshold={threshold}
       />
