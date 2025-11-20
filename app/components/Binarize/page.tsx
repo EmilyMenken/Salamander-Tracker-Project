@@ -9,7 +9,7 @@ export default function BinarizePage() {
   const [threshold, setThreshold] = useState(100);
 
   return (
-    <div style={{ display: "flex", gap: "40px" }}>
+    <div>
       <Color 
         color={color}
         threshold={threshold}
