@@ -76,8 +76,8 @@ export default function Process({
 
       setJobId(data.jobId);
       setStatus("processing...");
-    } catch (err: any) {
-      setStatus(`Error: ${err.message}`);
+    } catch (err) {
+      setStatus(`Error: ${err}`);
     }
   };
 
@@ -98,6 +98,7 @@ export default function Process({
           clearInterval(interval);
         }
       } catch (err) {
+        console.log(err)
         setStatus("Error fetching job status");
         clearInterval(interval);
       }

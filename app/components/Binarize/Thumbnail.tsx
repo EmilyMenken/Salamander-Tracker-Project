@@ -16,6 +16,11 @@ export default function Thumbnail({
 }) {
   const [thumbnail, setThumbnail] = useState<string | null>(null);
 
+export default function Thumbnail({ color, threshold }: ThumbProps) {
+  const [original, setOriginal] = useState<string | null>(null);
+  const [binarized, setBinarized] = useState<string | null>(null);
+
+  // Load original thumbnail once
   useEffect(() => {
     if (!selectedVideoId) {
       setThumbnail(null);
@@ -46,6 +51,16 @@ export default function Thumbnail({
     videoElement.addEventListener("loadeddata", () => captureFrame());
   }, [videos, selectedVideoId]);
 
+  // Load binarized thumbnail whenever color/threshold changes
+  useEffect(() => {
+    const url =
+      `http://localhost:3000/api/binarize/ensantina.mp4`
+      + `?color=${encodeURIComponent(color)}`
+      + `&threshold=${threshold}`;
+
+    setBinarized(url);
+  }, [color, threshold]);
+
   return (
     <div>
       {thumbnail ? (
@@ -55,4 +70,5 @@ export default function Thumbnail({
       )}
     </div>
   );
+}
 }
