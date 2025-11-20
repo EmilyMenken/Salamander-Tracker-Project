@@ -1,0 +1,26 @@
+"use client";
+import { useState } from "react";
+
+export default function FileUpload({ onAdd }: { onAdd: (file: File) => void }) {
+  const [file, setFile] = useState<File | null>(null);
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!file) return;
+
+    onAdd(file); // 👈 send file to VideoList state
+  }
+
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="file"
+          accept="video/mp4"
+          onChange={e => setFile(e.target.files?.[0] || null)}
+        />
+        <button type="submit">Upload</button>
+      </form>
+    </div>
+  );
+}
