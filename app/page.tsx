@@ -1,24 +1,27 @@
 "use client";
-import VideoList from "./components/VideoList"
-import Thumbnail from "./components/Binarize/Thumbnail"
-import JobStatus from "./components/Process/JobStatus"
-import Process from "./components/Process/Process"
+
 import { useState } from "react";
+import VideoList from "./components/VideoList";
+import Thumbnail from "./components/Binarize/Thumbnail";
+import JobStatus from "./components/Process/JobStatus";
+import Process from "./components/Process/Process";
 import FileUpload from "./components/FileUpload";
 
+type Video = {
+  id: string;
+  name: string;
+  url: string;
+};
+
 export default function DashboardPage() {
-  const [videos, setVideos] = useState([]);
+  const [videos, setVideos] = useState<Video[]>([]);
+  const [selectedVideoId, setSelectedVideoId] = useState<string | null>(null);
 
   function handleAddVideo(file: File) {
     const url = URL.createObjectURL(file);
-
-    const newVid = {
-      id: crypto.randomUUID(),
-      name: file.name,
-      url,
-    };
-
+    const newVid = { id: crypto.randomUUID(), name: file.name, url };
     setVideos(prev => [...prev, newVid]);
+    // Do NOT auto-select, user will choose manually
   }
 
   return (
@@ -26,11 +29,16 @@ export default function DashboardPage() {
       <h1>Dashboard</h1>
 
       <FileUpload onAdd={handleAddVideo} />
-
       <VideoList videos={videos} />
-
-      <Thumbnail />
-      <Process />
+      <Process
+        videos={videos}
+        selectedVideoId={selectedVideoId}
+        setSelectedVideoId={setSelectedVideoId}
+      />
+      <Thumbnail
+        videos={videos}
+        selectedVideoId={selectedVideoId}
+      />
       <JobStatus />
     </main>
   );

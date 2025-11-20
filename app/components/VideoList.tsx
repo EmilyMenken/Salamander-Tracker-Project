@@ -3,7 +3,7 @@
 type Video = {
   id: string;
   name: string;
-  url: string; // object URL
+  url: string;
 };
 
 export default function VideoList({ videos }: { videos: Video[] }) {
@@ -14,11 +14,7 @@ export default function VideoList({ videos }: { videos: Video[] }) {
       {videos.map(v => (
         <div key={v.id} style={{ marginBottom: "20px" }}>
           <p>{v.name}</p>
-          <video
-            src={v.url}
-            width={300}
-            controls
-          />
+          <video src={v.url} width={300} controls />
         </div>
       ))}
     </div>

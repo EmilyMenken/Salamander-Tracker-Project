@@ -8,7 +8,8 @@ export default function FileUpload({ onAdd }: { onAdd: (file: File) => void }) {
     e.preventDefault();
     if (!file) return;
 
-    onAdd(file); // 👈 send file to VideoList state
+    onAdd(file);
+    setFile(null);
   }
 
   return (

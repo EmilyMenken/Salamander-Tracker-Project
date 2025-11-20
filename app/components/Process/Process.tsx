@@ -1,36 +1,61 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import Color from "../Binarize/Color";
 
 type Video = {
   id: string;
-  fileName: string;
+  name: string;
+  url: string;
 };
 
-export default function Process() {
-  const [videos, setVideos] = useState<Video[]>([]);
-  const [selectedVideo, setSelectedVideo] = useState<string>("");
+export default function Process({
+  videos,
+  selectedVideoId,
+  setSelectedVideoId,
+}: {
+  videos: Video[];
+  selectedVideoId: string | null;
+  setSelectedVideoId: (id: string) => void;
+}) {
   const [jobId, setJobId] = useState<string | null>(null);
   const [status, setStatus] = useState<string | null>(null);
   const [resultUrl, setResultUrl] = useState<string | null>(null);
+  const [thumbnail, setThumbnail] = useState<string | null>(null);
 
-  // Fetch videos like VideoList
+  const selectedVideo = videos.find(v => v.id === selectedVideoId);
+
+  // Capture first frame as thumbnail
   useEffect(() => {
-    const fetchVideos = async () => {
-      try {
-        const res = await fetch("/api/videos");
-        const data: Video[] = await res.json();
-        setVideos(data);
-        if (data.length > 0) setSelectedVideo(data[0].fileName); // default selection
-      } catch (err) {
-        console.error("Error fetching videos:", err);
-      }
-    };
-    fetchVideos();
-  }, []);
+    if (!selectedVideo) {
+      setThumbnail(null);
+      return;
+    }
 
-  // Called when Color.tsx form is submitted
+    const videoElement = document.createElement("video");
+    videoElement.src = selectedVideo.url;
+    videoElement.crossOrigin = "anonymous";
+    videoElement.muted = true;
+
+    const captureFrame = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = videoElement.videoWidth;
+      canvas.height = videoElement.videoHeight;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+
+      ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+      const dataUrl = canvas.toDataURL("image/png");
+      setThumbnail(dataUrl);
+    };
+
+    // Wait until metadata is loaded (so width/height are available)
+    videoElement.addEventListener("loadedmetadata", () => {
+      videoElement.currentTime = 0;
+      // Wait for first frame to be ready
+      videoElement.addEventListener("seeked", captureFrame, { once: true });
+    });
+  }, [selectedVideo]);
+
   const handleSubmit = async (color: string, threshold: number) => {
     if (!selectedVideo) return;
 
@@ -40,7 +65,7 @@ export default function Process() {
 
     try {
       const res = await fetch(
-        `http://localhost:3000/api/process/${selectedVideo}?targetColor=${color.slice(
+        `http://localhost:3000/api/process/${selectedVideo.name}?targetColor=${color.slice(
           1
         )}&threshold=${threshold}`,
         { method: "POST" }
@@ -90,20 +115,40 @@ export default function Process() {
         <label>
           Select Video:
           <select
-            value={selectedVideo}
-            onChange={(e) => setSelectedVideo(e.target.value)}
+            value={selectedVideoId || ""}
+            onChange={(e) => setSelectedVideoId(e.target.value)}
             style={{ marginLeft: "10px" }}
           >
+            <option value="">Select a video</option>
             {videos.map((video) => (
-              <option key={video.id} value={video.fileName}>
-                {video.fileName}
+              <option key={video.id} value={video.id}>
+                {video.name}
               </option>
             ))}
           </select>
         </label>
       )}
 
-      <Color onSubmit={handleSubmit} />
+      {/* Color picker and thumbnail side by side */}
+      <div style={{ display: "flex", alignItems: "flex-start", gap: "20px" }}>
+        <Color onSubmit={handleSubmit} />
+        {thumbnail ? (
+          <img src={thumbnail} width={300} alt="Video thumbnail" />
+        ) : (
+          <div
+            style={{
+              width: 300,
+              height: 200,
+              border: "1px solid #ccc",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <p>No video selected</p>
+          </div>
+        )}
+      </div>
 
       {jobId && <p>Job ID: {jobId}</p>}
       {status && <p>Status: {status}</p>}
