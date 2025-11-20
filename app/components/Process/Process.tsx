@@ -108,7 +108,7 @@ export default function Process({
   }, [jobId]);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
+    <div>
       <h2>Process Video</h2>
 
       {/* Video selector */}
@@ -136,16 +136,7 @@ export default function Process({
         {thumbnail ? (
           <img src={thumbnail} width={300} alt="Video thumbnail" />
         ) : (
-          <div
-            style={{
-              width: 300,
-              height: 200,
-              border: "1px solid #ccc",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+          <div>
             <p>No video selected</p>
           </div>
         )}

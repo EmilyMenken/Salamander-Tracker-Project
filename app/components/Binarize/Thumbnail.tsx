@@ -67,7 +67,7 @@ export default function Thumbnail({
   }, [selectedVideo, color, threshold]);
 
   return (
-    <div style={{ display: "flex", gap: "20px" }}>
+    <div>
       {/* Original thumbnail */}
       <div>
         {original ? (
@@ -93,16 +93,7 @@ export default function Thumbnail({
         {binarized ? (
           <img src={binarized} width={300} alt="Binarized thumbnail" />
         ) : (
-          <div
-            style={{
-              width: 300,
-              height: 200,
-              border: "1px solid #ccc",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+          <div>
             <p>No binarized preview</p>
           </div>
         )}

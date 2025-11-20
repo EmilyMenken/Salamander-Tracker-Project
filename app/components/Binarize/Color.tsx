@@ -17,10 +17,10 @@ export default function Color({
 }: ColorProps) {
 
   return (
-    <div style={{ display: "flex", gap: "20px" }}>
+    <div>
       <HexColorPicker color={color} onChange={onColorChange} />
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+      <div>
         <label>
           Hex Color:
           <HexColorInput
