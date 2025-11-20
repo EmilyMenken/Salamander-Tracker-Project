@@ -1,27 +1,26 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
 type Video = {
   id: string;
-  fileName: string;
+  name: string;
+  url: string; // object URL
 };
 
-export default function VideoList() {
-
-  const [videos, setVideos] = useState<Video[]>([]);
-
-  useEffect(() => {
-    const fetchVideos = async () => {
-      const res = await fetch("/api/videos");
-      const data: Video[] = await res.json();
-      setVideos(data);
-    };
-
-    fetchVideos();
-  }, []);
-
+export default function VideoList({ videos }: { videos: Video[] }) {
   return (
-    <pre>{JSON.stringify(videos, null, 2)}</pre>
+    <div>
+      <pre>{JSON.stringify(videos, null, 2)}</pre>
+
+      {videos.map(v => (
+        <div key={v.id} style={{ marginBottom: "20px" }}>
+          <p>{v.name}</p>
+          <video
+            src={v.url}
+            width={300}
+            controls
+          />
+        </div>
+      ))}
+    </div>
   );
 }
