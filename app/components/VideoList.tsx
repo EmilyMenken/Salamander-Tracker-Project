@@ -9,12 +9,15 @@ type Video = {
 export default function VideoList({ videos }: { videos: Video[] }) {
   return (
     <div>
-      <pre>{JSON.stringify(videos, null, 2)}</pre>
-
       {videos.map(v => (
         <div key={v.id} style={{ marginBottom: "20px" }}>
           <p>{v.name}</p>
-          <video src={v.url} width={300} controls />
+          <video
+            key={v.id} // add key here as well just in case
+            src={v.url}
+            width={300}
+            controls
+          />
         </div>
       ))}
     </div>

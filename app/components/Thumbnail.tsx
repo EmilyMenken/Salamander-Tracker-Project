@@ -71,14 +71,27 @@ export default function Thumbnail({
         {original ? (
           <img src={original} width={300} alt="Original thumbnail" />
         ) : (
-          <div style={{ width: 300, height: 200, border: "1px solid #ccc", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div
+            style={{
+              width: 300,
+              height: 200,
+              border: "1px solid #ccc",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center"
+            }}
+          >
             <p>No video selected</p>
           </div>
         )}
       </div>
 
       <div>
-        {loading ? <p>Loading binarized thumbnail...</p> : <img src={binarized || ""} width={300} alt="Binarized thumbnail" />}
+        {loading ? (
+          <p>Loading binarized thumbnail...</p>
+        ) : (
+          binarized && <img src={binarized} width={300} alt="Binarized thumbnail" />
+        )}
       </div>
     </div>
   );
