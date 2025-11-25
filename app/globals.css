@@ -4,8 +4,7 @@
 :root {
   --lavender: #DCD9E8;       /* background */
   --yellow-orange: #F5AF00;  /* secondary / CTA buttons */
-  --hunter-green: #436049;   /* headings + accents */
-  --dark-purple: #27233A;    /* text */
+  --dark-purple: #27233A;    /* text + accents + headings */
   --peach: #FFE8AD;          /* primary surfaces */
 }
 
@@ -32,7 +31,7 @@ main {
    HEADINGS
 ================================= */
 h1, h2, h3, h4, h5 {
-  color: var(--hunter-green);
+  color: var(--dark-purple);   /* use dark purple instead of green */
   margin-top: 1rem;
   margin-bottom: 0.5rem;
 }
@@ -44,12 +43,19 @@ button {
   background: var(--yellow-orange);
   color: white;
   border: none;
-  padding: 0.6rem 1.2rem;
+  padding: 0.7rem 1.4rem;      /* more spacing */
+  margin: 0.5rem 0;            /* spacing above and below */
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
   font-size: 1rem;
   transition: 0.2s ease-in-out;
+}
+
+/* Extra spacing when a button is next to inputs/selects (like FileUpload) */
+input + button,
+select + button {
+  margin-left: 1rem;           /* More horizontal spacing */
 }
 
 button:disabled {
@@ -68,7 +74,7 @@ select,
 input,
 textarea {
   background: white;
-  border: 2px solid var(--hunter-green);
+  border: 2px solid var(--dark-purple); /* dark purple border */
   padding: 0.5rem 0.7rem;
   border-radius: 6px;
   font-size: 1rem;
@@ -88,6 +94,7 @@ textarea:focus {
 ================================= */
 label {
   font-weight: 600;
+  color: var(--dark-purple);
 }
 
 /* ================================
@@ -98,21 +105,29 @@ main > div {
   background: var(--peach);
   padding: 1rem 1.25rem;
   border-radius: 12px;
-  border-left: 6px solid var(--hunter-green);
+  border-left: 6px solid var(--dark-purple);  /* purple accent */
   box-shadow: 0 3px 6px rgba(39, 35, 58, 0.15);
   margin-bottom: 1.5rem;
 }
 
 /* ================================
    NAVBAR (generic <nav> tag styling)
+   Adds space for a logo image
 ================================= */
 nav {
   background: var(--peach);
   padding: 1rem 2rem;
-  border-bottom: 4px solid var(--hunter-green);
+  border-bottom: 4px solid var(--dark-purple);
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.5rem;
+}
+
+/* Logo image */
+nav img {
+  height: 48px;       /* adjustable */
+  width: auto;
+  object-fit: contain;
 }
 
 nav a {
@@ -122,5 +137,5 @@ nav a {
 }
 
 nav a:hover {
-  color: var(--hunter-green);
+  color: var(--yellow-orange);
 }
