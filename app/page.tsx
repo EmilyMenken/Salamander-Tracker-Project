@@ -9,7 +9,8 @@ type Video = {
   id: string;
   name: string;
   url: string;
-  backend?: boolean; // mark backend videos so they can't be deleted
+  backend?: boolean; // mark backend videos
+  removed?: boolean; // temporary removal flag
 };
 
 export default function DashboardPage() {
@@ -20,21 +21,16 @@ export default function DashboardPage() {
   useEffect(() => {
     async function loadVideos() {
       try {
-        // Fetch video list from backend API
         const res = await fetch("http://localhost:3000/api/videos");
-        const data: { fileName?: string }[] = await res.json();
+        const filenames: string[] = await res.json();
 
-        const backendVideos: Video[] = data
-          .filter(v => v.fileName)
-          .map(v => ({
-            id: `backend-${v.fileName}`,
-            name: v.fileName!,
-            // Use static /videos route to play
-            url: `http://localhost:3000/videos/${encodeURIComponent(v.fileName!)}`,
-            backend: true,
-          }));
+        const backendVideos: Video[] = filenames.map((file, index) => ({
+          id: `backend-${index}`,
+          name: file,
+          url: `http://localhost:3000/api/videos/${encodeURIComponent(file)}`, // use API route directly
+          backend: true,
+        }));
 
-        // Load uploaded videos from sessionStorage
         const stored = sessionStorage.getItem("videos");
         const uploadedVideos: Video[] = stored
           ? JSON.parse(stored).filter((v: any) => v.name && v.url)
@@ -51,7 +47,6 @@ export default function DashboardPage() {
 
   function handleAddVideo(file: File) {
     if (!file.name) return;
-
     const url = URL.createObjectURL(file);
     const newVid: Video = { id: crypto.randomUUID(), name: file.name, url };
 
@@ -63,16 +58,12 @@ export default function DashboardPage() {
     });
   }
 
-  function handleDeleteVideo(id: string) {
-    setVideos(prev => {
-      const updated = prev.filter(v => v.id !== id);
-      // Update sessionStorage for uploaded videos only
-      const uploadedVideos = updated.filter(v => !v.backend);
-      sessionStorage.setItem("videos", JSON.stringify(uploadedVideos));
-      // If deleted video was selected, reset selection
-      if (selectedVideoId === id) setSelectedVideoId(null);
-      return updated;
-    });
+  // Temporary remove video from dashboard
+  function handleRemoveVideo(id: string) {
+    setVideos(prev =>
+      prev.map(v => (v.id === id ? { ...v, removed: true } : v))
+    );
+    if (selectedVideoId === id) setSelectedVideoId(null);
   }
 
   const handleGoToBinarize = () => {
@@ -80,29 +71,17 @@ export default function DashboardPage() {
     router.push(`/binarize?videoId=${selectedVideoId}`);
   };
 
+  const visibleVideos = videos.filter(v => !v.removed);
+
   return (
     <main>
       <h1>Dashboard</h1>
 
       <FileUpload onAdd={handleAddVideo} />
-      <div>
-        {videos.map(v => (
-          <div key={v.id} style={{ marginBottom: "20px" }}>
-            <p>{v.name}</p>
-            <video src={v.url} width={300} controls />
-            {!v.backend && (
-              <button
-                style={{ marginLeft: "10px" }}
-                onClick={() => handleDeleteVideo(v.id)}
-              >
-                Delete
-              </button>
-            )}
-          </div>
-        ))}
-      </div>
 
-      {videos.length > 0 && (
+      <VideoList videos={visibleVideos} onRemove={handleRemoveVideo} />
+
+      {visibleVideos.length > 0 && (
         <div style={{ marginTop: "20px" }}>
           <label>
             Select Video:
@@ -112,7 +91,7 @@ export default function DashboardPage() {
               style={{ marginLeft: "10px" }}
             >
               <option value="">Select a video</option>
-              {videos.map(v => (
+              {visibleVideos.map(v => (
                 <option key={v.id} value={v.id}>
                   {v.name}
                 </option>

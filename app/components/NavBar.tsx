@@ -11,7 +11,7 @@ export default function Navbar() {
           alt="Logo"
           width={48}
           height={48}
-          style={{ objectFit: "contain" }} // important for matching CSS intent
+          style={{ objectFit: "contain" }}
         />        
         <Link href="/">Home</Link>
         <Link href="/binarize">Binarize</Link>
