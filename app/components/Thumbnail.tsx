@@ -66,21 +66,12 @@ export default function Thumbnail({
   }, [selectedVideo, color, threshold]);
 
   return (
-    <div style={{ display: "flex", gap: "20px", alignItems: "flex-start" }}>
+    <div>
       <div>
         {original ? (
           <img src={original} width={300} alt="Original thumbnail" />
         ) : (
-          <div
-            style={{
-              width: 300,
-              height: 200,
-              border: "1px solid #ccc",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center"
-            }}
-          >
+          <div>
             <p>No video selected</p>
           </div>
         )}
