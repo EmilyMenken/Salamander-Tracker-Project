@@ -36,7 +36,23 @@ export default function Color({
             min={0}
             max={255}
             value={threshold}
-            onChange={(e) => onThresholdChange(Number(e.target.value))}
+            onChange={(e) =>
+              onThresholdChange(Number(e.target.value))
+            }
+          />
+        </label>
+
+        {/* --- NEW RANGE SLIDER --- */}
+        <label>
+          Threshold Slider:
+          <input
+            type="range"
+            min={0}
+            max={255}
+            value={threshold}
+            onChange={(e) =>
+              onThresholdChange(Number(e.target.value))
+            }
           />
         </label>
       </div>
