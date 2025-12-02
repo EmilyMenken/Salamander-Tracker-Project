@@ -29,7 +29,7 @@ export default function Color({
           />
         </label>
 
-        <label>
+        {/* <label>
           Threshold:
           <input
             type="number"
@@ -40,7 +40,7 @@ export default function Color({
               onThresholdChange(Number(e.target.value))
             }
           />
-        </label>
+        </label> */}
 
         {/* --- NEW RANGE SLIDER --- */}
         <label>

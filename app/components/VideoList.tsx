@@ -20,10 +20,9 @@ export default function VideoList({
       {videos.map(v => (
         <div
           key={v.id}
-          style={{ marginBottom: "20px", display: "flex", alignItems: "center" }}
         >
           <video src={v.url} width={300} controls style={{ marginRight: "10px" }} />
-          <p style={{ marginRight: "10px" }}>{v.name}</p>
+          <p>{v.name}</p>
           {onRemove && (
             <button onClick={() => onRemove(v.id)}>
               {v.backend ? "Remove from dashboard" : "Delete"}
