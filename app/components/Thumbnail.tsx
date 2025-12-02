@@ -15,8 +15,8 @@ export default function Thumbnail({
 }: {
   videos: Video[];
   selectedVideoId: string;
-  color: string;
-  threshold: number;
+  color: string;         // Hex color e.g. "#FF0000"
+  threshold: number;     // 0 - 255
 }) {
   const [original, setOriginal] = useState<string | null>(null);
   const [binarized, setBinarized] = useState<string | null>(null);
@@ -24,7 +24,7 @@ export default function Thumbnail({
 
   const selectedVideo = videos.find((v) => v.id === selectedVideoId);
 
-  // Fetch the original thumbnail from API
+  // Fetch original thumbnail from API
   useEffect(() => {
     if (!selectedVideo) {
       setOriginal(null);
@@ -35,13 +35,8 @@ export default function Thumbnail({
 
     const fetchThumbnail = async () => {
       try {
-        // Replace this URL with your API endpoint
         const url = `http://localhost:3000/api/thumbnail/${selectedVideo.name}`;
-        setOriginal(url); // If your API returns the image URL directly
-        // If your API returns binary data, you could fetch as blob:
-        // const response = await fetch(url);
-        // const blob = await response.blob();
-        // setOriginal(URL.createObjectURL(blob));
+        setOriginal(url);
       } catch (err) {
         console.error("Failed to fetch original thumbnail:", err);
         setOriginal(null);
@@ -53,12 +48,23 @@ export default function Thumbnail({
     fetchThumbnail();
   }, [selectedVideo]);
 
-  // Binarize whenever threshold or original changes
+  // Helper: convert hex color to RGB
+  const hexToRgb = (hex: string) => {
+    const sanitized = hex.replace("#", "");
+    const bigint = parseInt(sanitized, 16);
+    return {
+      r: (bigint >> 16) & 255,
+      g: (bigint >> 8) & 255,
+      b: bigint & 255,
+    };
+  };
+
+  // Binarize whenever threshold or color changes
   useEffect(() => {
     if (!original) return;
 
     const img = new Image();
-    img.crossOrigin = "anonymous"; // Important if API is on a different origin
+    img.crossOrigin = "anonymous";
     img.src = original;
     img.onload = () => {
       const canvas = document.createElement("canvas");
@@ -69,23 +75,32 @@ export default function Thumbnail({
 
       ctx.drawImage(img, 0, 0);
 
-      // Binarize
       const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
       const data = imageData.data;
+
+      const targetColor = hexToRgb(color);
 
       for (let i = 0; i < data.length; i += 4) {
         const r = data[i];
         const g = data[i + 1];
         const b = data[i + 2];
-        const gray = 0.299 * r + 0.587 * g + 0.114 * b;
-        const value = gray >= threshold ? 255 : 0;
+
+        // Calculate distance to selected color
+        const distance = Math.sqrt(
+          Math.pow(r - targetColor.r, 2) +
+            Math.pow(g - targetColor.g, 2) +
+            Math.pow(b - targetColor.b, 2)
+        );
+
+        // If distance is less than threshold, turn pixel white; else black
+        const value = distance <= threshold ? 255 : 0;
         data[i] = data[i + 1] = data[i + 2] = value;
       }
 
       ctx.putImageData(imageData, 0, 0);
       setBinarized(canvas.toDataURL("image/png"));
     };
-  }, [threshold, original]);
+  }, [threshold, color, original]); // <--- watch both threshold & color
 
   return (
     <div>
