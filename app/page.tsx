@@ -9,7 +9,7 @@ type Video = {
   id: string;
   name: string;
   url: string;
-  backend?: boolean; // mark backend videos as videos that can't be deleted
+  backend?: boolean;
   removed?: boolean;
 };
 
@@ -21,24 +21,18 @@ export default function DashboardPage() {
   useEffect(() => {
     async function loadVideos() {
       try {
-        // Fetch filenames from backend API
         const res = await fetch("http://localhost:3000/api/videos");
-
         const filenames: string[] = await res.json();
 
-        // Map filenames to playable backend videos
         const backendVideos: Video[] = filenames.map((file, index) => ({
           id: `backend-${index}`,
           name: file,
-          url: `http://localhost:3000/videos/${encodeURIComponent(file)}`, // <--- use static folder
+          url: `http://localhost:3000/videos/${encodeURIComponent(file)}`,
           backend: true,
         }));
 
-        // Load uploaded videos from sessionStorage
         const stored = sessionStorage.getItem("videos");
-        const uploadedVideos: Video[] = stored
-          ? JSON.parse(stored).filter((v: any) => v.name && v.url)
-          : [];
+        const uploadedVideos: Video[] = stored ? JSON.parse(stored).filter((v: any) => v.name && v.url) : [];
 
         setVideos([...backendVideos, ...uploadedVideos]);
       } catch (err) {
@@ -62,16 +56,13 @@ export default function DashboardPage() {
     });
   }
 
-  // Remove or delete video depending on backend flag
   function handleRemoveVideo(id: string) {
     const vid = videos.find(v => v.id === id);
     if (!vid) return;
 
     if (vid.backend) {
-      // Temporarily remove backend video from dashboard
       setVideos(prev => prev.map(v => (v.id === id ? { ...v, removed: true } : v)));
     } else {
-      // Permanently delete uploaded video
       setVideos(prev => {
         const updated = prev.filter(v => v.id !== id);
         const uploadedVideos = updated.filter(v => !v.backend);
@@ -96,10 +87,8 @@ export default function DashboardPage() {
 
       <FileUpload onAdd={handleAddVideo} />
 
-      {/* Video list with remove buttons */}
       <VideoList videos={visibleVideos} onRemove={handleRemoveVideo} />
 
-      {/* Video selection for binarization */}
       {visibleVideos.length > 0 && (
         <div style={{ marginTop: "20px" }}>
           <label>

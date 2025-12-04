@@ -1,35 +1,44 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { HexColorPicker, HexColorInput } from "react-colorful";
-import { useRouter } from "next/navigation";   // <-- add this
 
 type ColorProps = {
-  color: string;
-  threshold: number;
-  onColorChange: (color: string) => void;
-  onThresholdChange: (value: number) => void;
+  color?: string;
+  threshold?: number;
+  onColorChange?: (color: string) => void;
+  onThresholdChange?: (value: number) => void;
+  onSubmit?: (color: string, threshold: number) => void;
 };
 
 export default function Color({
-  color,
-  threshold,
+  color = "#ff0000",
+  threshold = 100,
   onColorChange,
-  onThresholdChange
+  onThresholdChange,
+  onSubmit
 }: ColorProps) {
+  const [localColor, setLocalColor] = useState(color);
+  const [localThreshold, setLocalThreshold] = useState(threshold);
 
-  const router = useRouter();  // <-- initialize router
+  useEffect(() => {
+    if (onColorChange) onColorChange(localColor);
+  }, [localColor]);
+
+  useEffect(() => {
+    if (onThresholdChange) onThresholdChange(localThreshold);
+  }, [localThreshold]);
 
   return (
     <div>
-
-      <HexColorPicker color={color} onChange={onColorChange} />
+      <HexColorPicker color={localColor} onChange={setLocalColor} />
 
       <div>
         <label>
           Hex Color:
           <HexColorInput
-            color={color}
-            onChange={onColorChange}
+            color={localColor}
+            onChange={setLocalColor}
             prefixed
           />
         </label>
@@ -40,20 +49,16 @@ export default function Color({
             type="range"
             min={0}
             max={255}
-            value={threshold}
-            onChange={(e) =>
-              onThresholdChange(Number(e.target.value))
-            }
+            value={localThreshold}
+            onChange={(e) => setLocalThreshold(Number(e.target.value))}
           />
         </label>
 
-        {/* --- NEW BUTTON TO NAVIGATE --- */}
-        <button
-          onClick={() => router.push("/process")}
-          style={{ marginTop: "1rem" }}
-        >
-          Process Video
-        </button>
+        {onSubmit && (
+          <button onClick={() => onSubmit(localColor, localThreshold)}>
+            Process Video
+          </button>
+        )}
       </div>
     </div>
   );

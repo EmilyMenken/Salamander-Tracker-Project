@@ -1,77 +1,91 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 type Job = {
-  id: string;
+  jobId: string;
   fileName: string;
   targetColor: string;
   threshold: number;
   status: string;
-  csvUrl?: string;
+  result?: string;
 };
 
 export default function ProcessPage() {
-  const [jobs, setJobs] = useState<Job[]>([]);
+  const searchParams = useSearchParams();
+  const videoName = searchParams.get("videoName");
+  const targetColor = searchParams.get("targetColor") || "#ff0000";
+  const threshold = Number(searchParams.get("threshold") || 100);
+
+  const [job, setJob] = useState<Job | null>(null);
+  const [status, setStatus] = useState("starting...");
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchJobs = async () => {
+    if (!videoName) return;
+
+    let interval: NodeJS.Timer;
+
+    const startJob = async () => {
       try {
-        // Fetch from your Docker-hosted backend
-        const res = await fetch("http://localhost:3000/api/session-jobs");
-        const data: Job[] = await res.json();
-        setJobs(data);
-      } catch (err) {
-        console.error("Failed to fetch jobs:", err);
+        // Send full hex color (with #) to backend
+        const res = await fetch(
+          `http://localhost:3000/api/process/${videoName}?targetColor=${encodeURIComponent(targetColor)}&threshold=${threshold}`,
+          { method: "POST" }
+        );
+
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(`Server error: ${res.status} - ${text}`);
+        }
+
+        const data: Job = await res.json();
+        setJob(data);
+        setStatus(data.status);
+
+        // Poll status every 2 seconds
+        interval = setInterval(async () => {
+          try {
+            const statusRes = await fetch(
+              `http://localhost:3000/api/process/${data.jobId}/status`
+            );
+            const statusData = await statusRes.json();
+            setStatus(statusData.status);
+
+            if (statusData.status === "done" || statusData.status === "error") {
+              clearInterval(interval);
+              setJob(prev => prev ? { ...prev, result: statusData.result } : prev);
+            }
+          } catch (err) {
+            clearInterval(interval);
+            setError("Failed to fetch job status");
+          }
+        }, 2000);
+      } catch (err: any) {
+        setError(err.message);
       }
     };
 
-    fetchJobs();
-  }, []);
+    startJob();
+
+    return () => clearInterval(interval);
+  }, [videoName, targetColor, threshold]);
+
+  if (error) return <p style={{ color: "red" }}>Error: {error}</p>;
+  if (!job) return <p>Starting processing...</p>;
 
   return (
-    <main style={{ padding: "20px" }}>
-      <h1>Processing Jobs</h1>
-      {jobs.length === 0 ? (
-        <p>No jobs processed yet.</p>
-      ) : (
-        jobs.map(job => (
-          <div
-            key={job.id}
-            style={{
-              border: "1px solid #ccc",
-              padding: "10px",
-              marginBottom: "10px",
-            }}
-          >
-            <p>
-              <strong>File:</strong> {job.fileName}
-            </p>
-            <p>
-              <strong>Target Color:</strong> {job.targetColor}
-            </p>
-            <p>
-              <strong>Threshold:</strong> {job.threshold}
-            </p>
-            <p>
-              <strong>Status:</strong> {job.status}
-            </p>
-            {job.csvUrl && (
-              <p>
-                <strong>CSV:</strong>{" "}
-                <a
-                  href={job.csvUrl}
-                  download
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Download CSV
-                </a>
-              </p>
-            )}
-          </div>
-        ))
+    <div>
+      <h1>Processing Video: {job.fileName}</h1>
+      <p>Status: {status}</p>
+      {job.result && (
+        <p>
+          <a href={job.result} target="_blank" rel="noopener noreferrer">
+            Download Result
+          </a>
+        </p>
       )}
-    </main>
+    </div>
   );
 }
