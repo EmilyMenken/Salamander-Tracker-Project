@@ -23,6 +23,7 @@ export default function DashboardPage() {
       try {
         // Fetch filenames from backend API
         const res = await fetch("http://localhost:3000/api/videos");
+
         const filenames: string[] = await res.json();
 
         // Map filenames to playable backend videos
