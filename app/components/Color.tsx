@@ -1,6 +1,7 @@
 "use client";
 
 import { HexColorPicker, HexColorInput } from "react-colorful";
+import { useRouter } from "next/navigation";   // <-- add this
 
 type ColorProps = {
   color: string;
@@ -15,8 +16,12 @@ export default function Color({
   onColorChange,
   onThresholdChange
 }: ColorProps) {
+
+  const router = useRouter();  // <-- initialize router
+
   return (
     <div>
+
       <HexColorPicker color={color} onChange={onColorChange} />
 
       <div>
@@ -29,20 +34,6 @@ export default function Color({
           />
         </label>
 
-        {/* <label>
-          Threshold:
-          <input
-            type="number"
-            min={0}
-            max={255}
-            value={threshold}
-            onChange={(e) =>
-              onThresholdChange(Number(e.target.value))
-            }
-          />
-        </label> */}
-
-        {/* --- NEW RANGE SLIDER --- */}
         <label>
           Threshold Slider:
           <input
@@ -55,6 +46,14 @@ export default function Color({
             }
           />
         </label>
+
+        {/* --- NEW BUTTON TO NAVIGATE --- */}
+        <button
+          onClick={() => router.push("/process")}
+          style={{ marginTop: "1rem" }}
+        >
+          Process Video
+        </button>
       </div>
     </div>
   );
