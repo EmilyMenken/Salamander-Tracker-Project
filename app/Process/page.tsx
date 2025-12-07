@@ -34,6 +34,7 @@ export default function ProcessPage() {
           `http://localhost:3000/api/process/${videoName}?targetColor=${encodeURIComponent(targetColor)}&threshold=${threshold}`,
           { method: "POST" }
         );
+        console.log(res);
 
         if (!res.ok) {
           const text = await res.text();

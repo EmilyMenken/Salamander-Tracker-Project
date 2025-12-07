@@ -2,39 +2,31 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import VideoList from "./components/VideoList";
-import FileUpload from "./components/FileUpload";
 
 type Video = {
   id: string;
   name: string;
   url: string;
-  backend?: boolean;
-  removed?: boolean;
 };
 
 export default function DashboardPage() {
   const [videos, setVideos] = useState<Video[]>([]);
-  const [selectedVideoId, setSelectedVideoId] = useState<string | null>(null);
+  const [selectedVideoId, setSelectedVideoId] = useState<string>("");
   const router = useRouter();
 
   useEffect(() => {
     async function loadVideos() {
       try {
-        const res = await fetch("http://localhost:3000/api/videos");
+        const res = await fetch("http://localhost:3000/api/videos"); // <-- YOUR endpoint
         const filenames: string[] = await res.json();
 
         const backendVideos: Video[] = filenames.map((file, index) => ({
           id: `backend-${index}`,
           name: file,
-          url: `http://localhost:3000/videos/${encodeURIComponent(file)}`,
-          backend: true,
+          url: `http://localhost:3000/videos/${encodeURIComponent(file)}`, // <-- YOUR video base URL
         }));
 
-        const stored = sessionStorage.getItem("videos");
-        const uploadedVideos: Video[] = stored ? JSON.parse(stored).filter((v: any) => v.name && v.url) : [];
-
-        setVideos([...backendVideos, ...uploadedVideos]);
+        setVideos(backendVideos);
       } catch (err) {
         console.error("Failed to load videos:", err);
       }
@@ -43,63 +35,31 @@ export default function DashboardPage() {
     loadVideos();
   }, []);
 
-  function handleAddVideo(file: File) {
-    if (!file.name) return;
-    const url = URL.createObjectURL(file);
-    const newVid: Video = { id: crypto.randomUUID(), name: file.name, url };
-
-    setVideos(prev => {
-      const updated = [...prev, newVid];
-      const uploadedVideos = updated.filter(v => !v.backend);
-      sessionStorage.setItem("videos", JSON.stringify(uploadedVideos));
-      return updated;
-    });
-  }
-
-  function handleRemoveVideo(id: string) {
-    const vid = videos.find(v => v.id === id);
-    if (!vid) return;
-
-    if (vid.backend) {
-      setVideos(prev => prev.map(v => (v.id === id ? { ...v, removed: true } : v)));
-    } else {
-      setVideos(prev => {
-        const updated = prev.filter(v => v.id !== id);
-        const uploadedVideos = updated.filter(v => !v.backend);
-        sessionStorage.setItem("videos", JSON.stringify(uploadedVideos));
-        return updated;
-      });
-    }
-
-    if (selectedVideoId === id) setSelectedVideoId(null);
-  }
-
   const handleGoToBinarize = () => {
     if (!selectedVideoId) return;
-    router.push(`/binarize?videoId=${selectedVideoId}`);
-  };
 
-  const visibleVideos = videos.filter(v => !v.removed);
+    const video = videos.find(v => v.id === selectedVideoId);
+    if (!video) return;
+
+    // Pass the full video URL to the binarize page
+    router.push(`/binarize?url=${encodeURIComponent(video.url)}`);
+  };
 
   return (
     <main>
       <h1>Dashboard</h1>
 
-      <FileUpload onAdd={handleAddVideo} />
-
-      <VideoList videos={visibleVideos} onRemove={handleRemoveVideo} />
-
-      {visibleVideos.length > 0 && (
+      {videos.length > 0 && (
         <div style={{ marginTop: "20px" }}>
           <label>
             Select Video:
             <select
-              value={selectedVideoId || ""}
+              value={selectedVideoId}
               onChange={e => setSelectedVideoId(e.target.value)}
               style={{ marginLeft: "10px" }}
             >
-              <option value="">Select a video</option>
-              {visibleVideos.map(v => (
+              <option value="">Choose a video</option>
+              {videos.map(v => (
                 <option key={v.id} value={v.id}>
                   {v.name}
                 </option>

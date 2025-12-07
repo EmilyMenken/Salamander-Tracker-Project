@@ -1,42 +1,26 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSearchParams, useRouter } from "next/navigation"; // <-- import useRouter
+import { useSearchParams, useRouter } from "next/navigation";
 import Color from "../components/Color";
 import Thumbnail from "../components/Thumbnail";
 
-type Video = {
-  id: string;
-  name: string;
-  url: string;
-};
-
 export default function BinarizePage() {
   const searchParams = useSearchParams();
-  const videoId = searchParams.get("videoId");
-  const router = useRouter(); // <-- initialize router
+  const videoUrl = searchParams.get("url");   // <-- GET THE VIDEO URL NOW
+  const router = useRouter();
 
-  const [videos, setVideos] = useState<Video[]>([]);
-  const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
   const [color, setColor] = useState("#ff0000");
   const [threshold, setThreshold] = useState(100);
 
-  useEffect(() => {
-    const stored = sessionStorage.getItem("videos");
-    if (stored) setVideos(JSON.parse(stored));
-  }, []);
-
-  useEffect(() => {
-    if (!videoId || videos.length === 0) return;
-    const vid = videos.find(v => v.id === videoId) || null;
-    setSelectedVideo(vid);
-  }, [videoId, videos]);
-
-  if (!selectedVideo) return <div>No video selected</div>;
+  // If no video URL, show error
+  if (!videoUrl) {
+    return <div>No video selected</div>;
+  }
 
   const handleGoToProcess = () => {
     router.push(
-      `/process?videoName=${encodeURIComponent(selectedVideo.name)}&targetColor=${encodeURIComponent(
+      `/process?videoUrl=${encodeURIComponent(videoUrl)}&targetColor=${encodeURIComponent(
         color
       )}&threshold=${threshold}`
     );
@@ -46,6 +30,8 @@ export default function BinarizePage() {
     <div>
       <h1>Binarize Video</h1>
 
+      <video src={videoUrl} controls width="400" style={{ marginBottom: "1rem" }} />
+
       <Color
         color={color}
         threshold={threshold}
@@ -54,8 +40,7 @@ export default function BinarizePage() {
       />
 
       <Thumbnail
-        videos={videos}
-        selectedVideoId={selectedVideo.id}
+        videoUrl={videoUrl}      // <-- PASS THE URL, NOT A VIDEO LIST
         color={color}
         threshold={threshold}
       />
