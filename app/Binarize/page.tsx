@@ -30,8 +30,6 @@ export default function BinarizePage() {
     <div>
       <h1>Binarize Video</h1>
 
-      <video src={videoUrl} controls width="400" style={{ marginBottom: "1rem" }} />
-
       <Color
         color={color}
         threshold={threshold}
