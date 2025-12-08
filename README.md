@@ -1,36 +1,116 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Salamander Finder Application
 
-## Getting Started
+A web-based tool that allows users to upload videos, select a color threshold, and binarize frames to identify salamander movement and centroid positions.
 
-First, run the development server:
+This tool was created to help identify and track salamander position in videos using binarization and color filtering.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🚀 Features
+
+* **Video Upload & Preview** – Upload a video and view a generated thumbnail.
+* **Color Selection** – Choose a color using a color picker for binarization.
+* **Threshold Adjustment** – Fine‑tune threshold values to isolate the salamander more accurately.
+* **Frame Processing** – Extract and display the original and binarized images.
+* **Responsive UI** – Clean, playful interface styled with a lavender‑purple theme.
+
+---
+
+## 📸 How It Works
+
+1. User uploads a video.
+2. Server extracts a specific frame using JCodec.
+3. Color + threshold settings are applied.
+4. Binarized image is generated.
+5. Both original & binarized thumbnails are displayed.
+
+---
+
+## 🛠️ Tech Stack
+
+* **Next.js 14** (App Router)
+* **TypeScript**
+* **Node.js** API routes
+* **Custom CSS (no frameworks)**
+* **JCodec (server-side video frame extraction)**
+
+---
+
+<!-- ## 📂 Project Structure
+
+```
+project-root/
+├── public/
+│   ├── icons/
+│   └── images/
+├── src/
+│   ├── app/
+│   │   ├── page.tsx
+|   |   ├── layout.tsx
+│   │   ├── binarize/page.tsx
+│   │   ├── process/page.tsx
+|   |   └── globals.css
+│   └── api/
+│       └── videos/route.ts
+└── README.md
+``` -->
+
+## 🔧 Installation & Setup
+
+### 1. Clone the repository
+
+```
+git clone https://github.com/yourname/your-repo.git
+cd your-repo
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Install dependencies
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+npm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 3. Run the development server
 
-## Learn More
+```
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Visit **[http://localhost:3000](http://localhost:3000)** to find that salamander!
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+<!-- ## 🔌 API Endpoints
 
-## Deploy on Vercel
+### `POST /api/process`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Processes a frame from an uploaded video.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### `GET /api/videos`
+
+Returns available uploaded videos.
+
+--- -->
+
+<!-- ## 🎨 UI Notes
+
+* Navbar and footer use a deep purple background.
+* All page text is styled dark purple with controlled overrides.
+* Cards use a soft peach color with glow accents. -->
+
+
+<!-- ## 🧪 Testing
+
+You can add Jest or Vitest for unit testing. (Optional)
+
+--- -->
+
+<!-- ## 📜 License
+
+MIT License.
+
+--- -->
+
+<!-- ## 🤝 Contributing
+
+Pull requests welcome! Open an issue if you'd like to suggest features or report bugs.
+
+--- -->
