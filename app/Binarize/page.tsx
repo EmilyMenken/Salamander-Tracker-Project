@@ -1,19 +1,18 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Color from "../components/Color";
 import Thumbnail from "../components/Thumbnail";
 
 export default function BinarizePage() {
   const searchParams = useSearchParams();
-  const videoUrl = searchParams.get("url");   // <-- GET THE VIDEO URL NOW
+  const videoUrl = searchParams.get("url"); // GET THE VIDEO URL
   const router = useRouter();
 
   const [color, setColor] = useState("#ff0000");
   const [threshold, setThreshold] = useState(100);
 
-  // If no video URL, show error
   if (!videoUrl) {
     return <div>No video selected</div>;
   }
@@ -30,6 +29,9 @@ export default function BinarizePage() {
     <div>
       <h1>Binarize Video</h1>
 
+      {/* Selected video player at the top */}
+      <video src={videoUrl} controls width={600} />
+
       <Color
         color={color}
         threshold={threshold}
@@ -38,12 +40,12 @@ export default function BinarizePage() {
       />
 
       <Thumbnail
-        videoUrl={videoUrl}      // <-- PASS THE URL, NOT A VIDEO LIST
+        videoUrl={videoUrl} // PASS THE URL, NOT A VIDEO LIST
         color={color}
         threshold={threshold}
       />
 
-      <button onClick={handleGoToProcess} style={{ marginTop: "1rem" }}>
+      <button onClick={handleGoToProcess}>
         Go to Process Page
       </button>
     </div>
