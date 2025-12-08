@@ -86,17 +86,22 @@ export default function ProcessPage() {
     <div>
       <h1>Processing Video: {job.fileName}</h1>
       <p>Status: {status}</p>
+      <p>Video Name: {videoName}</p>
+      <p>Target Color: {targetColor}</p>
+      <p>Threshold: {threshold}</p>
 
       {job.result && (
-        <p>
+      <div>
           <a
             href={`http://localhost:3000/results/${job.result.split('/').pop()}`}
             target="_blank"
-            rel="noopener noreferrer">
-            Download Result
+            rel="noopener noreferrer"
+          >
+            <button>Download Result</button>
           </a>
-        </p>
+        </div>
       )}
     </div>
   );
+
 }

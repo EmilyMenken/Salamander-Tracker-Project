@@ -29,7 +29,6 @@ export default function Color({
     if (onThresholdChange) onThresholdChange(localThreshold);
   }, [localThreshold]);
 
-  // ---- Eyedropper Function ----
   const useEyeDropper = async () => {
     if ("EyeDropper" in window) {
       const eyeDropper = new (window as any).EyeDropper();
@@ -68,6 +67,7 @@ export default function Color({
             onChange={(e) => setLocalThreshold(Number(e.target.value))}
           />
         </label>
+        <p>Current Threshold: {localThreshold}</p>
 
         {onSubmit && (
           <button onClick={() => onSubmit(localColor, localThreshold)}>
