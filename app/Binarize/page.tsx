@@ -29,9 +29,6 @@ export default function BinarizePage() {
     <div>
       <h1>Binarize Video</h1>
 
-      {/* Selected video player at the top */}
-      <video src={videoUrl} controls width={600} />
-
       <Color
         color={color}
         threshold={threshold}
@@ -39,6 +36,10 @@ export default function BinarizePage() {
         onThresholdChange={setThreshold}
       />
 
+       {/* Selected video player at the top */}
+      <video src={videoUrl} controls width={600} />
+
+      
       <Thumbnail
         videoUrl={videoUrl} // PASS THE URL, NOT A VIDEO LIST
         color={color}

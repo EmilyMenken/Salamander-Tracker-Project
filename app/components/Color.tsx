@@ -44,19 +44,18 @@ export default function Color({
   };
 
   return (
-    <div>
-      <HexColorPicker color={localColor} onChange={setLocalColor} />
+    <div className="binarize-controls">
+      {/* Left: Color Picker */}
+      <div className="color-controls">
+        <HexColorPicker color={localColor} onChange={setLocalColor} />
 
-      <button onClick={useEyeDropper}>
-        Pick From Screen
-      </button>
+        <button onClick={useEyeDropper}>
+          Pick From Screen
+        </button>
+      </div>
 
-      <div>
-        <label>
-          Hex Color:
-          <HexColorInput color={localColor} onChange={setLocalColor} prefixed />
-        </label>
-
+      {/* Right: Threshold Controls + Hex Input */}
+      <div className="threshold-controls">
         <label>
           Threshold Slider:
           <input
@@ -67,7 +66,13 @@ export default function Color({
             onChange={(e) => setLocalThreshold(Number(e.target.value))}
           />
         </label>
+
         <p>Current Threshold: {localThreshold}</p>
+
+        <label>
+          Hex Color:
+          <HexColorInput color={localColor} onChange={setLocalColor} prefixed />
+        </label>
 
         {onSubmit && (
           <button onClick={() => onSubmit(localColor, localThreshold)}>

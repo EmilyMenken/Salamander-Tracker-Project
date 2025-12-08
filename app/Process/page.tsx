@@ -83,25 +83,27 @@ export default function ProcessPage() {
   if (!job) return <p>Starting processing...</p>;
 
   return (
-    <div>
-      <h1>Processing Video: {job.fileName}</h1>
-      <p>Status: {status}</p>
-      <p>Video Name: {videoName}</p>
-      <p>Target Color: {targetColor}</p>
-      <p>Threshold: {threshold}</p>
+    <div className="process-page">
+    <h1>Processing Video: {job.fileName}</h1>
 
-      {job.result && (
+    <p>Status: <span className="value">{status}</span></p>
+    <p>Video Name: <span className="value">{videoName}</span></p>
+    <p>Target Color: <span className="value">{targetColor}</span></p>
+    <p>Threshold: <span className="value">{threshold}</span></p>
+
+    {job.result && (
       <div>
-          <a
-            href={`http://localhost:3000/results/${job.result.split('/').pop()}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <button>Download Result</button>
-          </a>
-        </div>
-      )}
+        <a
+          href={`http://localhost:3000/results/${job.result.split('/').pop()}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <button>Download Result</button>
+        </a>
+      </div>
+    )}
     </div>
+
   );
 
 }

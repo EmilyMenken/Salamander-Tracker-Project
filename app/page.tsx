@@ -54,7 +54,7 @@ export default function DashboardPage() {
 
       {videos.length > 0 && (
         <div style={{ marginTop: "20px" }}>
-          <label>
+          <label id="select-video">
             Select Video:
             <select
               value={selectedVideoId}

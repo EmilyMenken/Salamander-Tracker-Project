@@ -90,7 +90,7 @@ export default function Thumbnail({
   }, [original, color, threshold]);
 
   return (
-    <div class="thumbnail-row">
+    <div className="thumbnail-row">
       <div>
         {loading ? (
           <p>Loading thumbnail...</p>
