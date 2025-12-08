@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import UsageInstructions from "./components/UsageInstructions";
 
 type Video = {
   id: string;
@@ -47,7 +48,9 @@ export default function DashboardPage() {
 
   return (
     <main>
-      <h1>Dashboard</h1>
+      <h1>Find that Salamander!</h1>
+
+      <UsageInstructions />
 
       {videos.length > 0 && (
         <div style={{ marginTop: "20px" }}>
