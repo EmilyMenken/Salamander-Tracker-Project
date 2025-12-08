@@ -7,7 +7,7 @@ export default function Footer(){
 
         <footer>
         
-        <p> Xalli and Emily 2025 ©️</p>
+            <p>© 2025 Salamander Finder. All rights reserved. Built by Xalli B and Emily M.</p>
         
         </footer>
 
