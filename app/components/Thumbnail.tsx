@@ -90,12 +90,12 @@ export default function Thumbnail({
   }, [original, color, threshold]);
 
   return (
-    <div>
+    <div className="thumbnail-row">
       <div>
         {loading ? (
           <p>Loading thumbnail...</p>
         ) : original ? (
-          <img src={original} width={300} alt="Original thumbnail" />
+          <img id="og-thumbnail" src={original} alt="Original thumbnail" />
         ) : (
           <p>No thumbnail available</p>
         )}
@@ -103,7 +103,7 @@ export default function Thumbnail({
 
       <div>
         {binarized ? (
-          <img src={binarized} width={300} alt="Binarized thumbnail" />
+          <img id="binarized-thumbnail" src={binarized} alt="Binarized thumbnail" />
         ) : (
           <p>Generating binarized thumbnail...</p>
         )}
