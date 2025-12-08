@@ -91,7 +91,7 @@ export default function Thumbnail({
 
   return (
     <div>
-      <div style={{ marginBottom: "1rem" }}>
+      <div>
         {loading ? (
           <p>Loading thumbnail...</p>
         ) : original ? (

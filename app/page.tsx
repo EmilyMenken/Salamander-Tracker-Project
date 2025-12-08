@@ -53,13 +53,12 @@ export default function DashboardPage() {
       <UsageInstructions />
 
       {videos.length > 0 && (
-        <div style={{ marginTop: "20px" }}>
+        <div>
           <label>
             Select Video:
             <select
               value={selectedVideoId}
               onChange={e => setSelectedVideoId(e.target.value)}
-              style={{ marginLeft: "10px" }}
             >
               <option value="">Choose a video</option>
               {videos.map(v => (
@@ -72,7 +71,6 @@ export default function DashboardPage() {
 
           <button
             onClick={handleGoToBinarize}
-            style={{ marginLeft: "10px" }}
             disabled={!selectedVideoId}
           >
             Go to Binarize

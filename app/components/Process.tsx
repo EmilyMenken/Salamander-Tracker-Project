@@ -118,7 +118,6 @@ export default function Process({
           <select
             value={selectedVideoId || ""}
             onChange={(e) => setSelectedVideoId(e.target.value)}
-            style={{ marginLeft: "10px" }}
           >
             <option value="">Select a video</option>
             {videos.map((video) => (
@@ -130,11 +129,10 @@ export default function Process({
         </label>
       )}
 
-      {/* Color picker and thumbnail side by side */}
-      <div style={{ display: "flex", alignItems: "flex-start", gap: "20px" }}>
+      <div>
         <Color onSubmit={handleSubmit} />
         {thumbnail ? (
-          <img src={thumbnail} width={300} alt="Video thumbnail" />
+          <img src={thumbnail} alt="Video thumbnail" />
         ) : (
           <div>
             <p>No video selected</p>
