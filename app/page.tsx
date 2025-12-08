@@ -48,7 +48,7 @@ export default function DashboardPage() {
 
   return (
     <main>
-      <h1>Find that Salamander!</h1>
+      <h1 id="find-salamander">Find that Salamander!</h1>
 
       <UsageInstructions />
 

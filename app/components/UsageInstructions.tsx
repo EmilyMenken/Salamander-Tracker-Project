@@ -1,7 +1,7 @@
 export default function UsageInstructions() {
   return (
     <div>
-      <h2>How to Use This Application</h2>
+      <h2>How to Find a Salamander</h2>
 
       <h3>1. Select a Video</h3>
       <p>
