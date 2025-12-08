@@ -81,7 +81,8 @@ export default function ProcessPage() {
   if (!job) return <p>Starting processing...</p>;
 
   return (
-    <div>
+    <main>
+      <div>
       <h1>Processing Video: {job.fileName}</h1>
       <p>Status: {status}</p>
       <p>Video Name: {videoName}</p>
@@ -99,9 +100,11 @@ export default function ProcessPage() {
           </a>
         </div>
       )}
+    </div>
+
 
       <Footer />
 
-    </div>
+    </main>
   );
 }

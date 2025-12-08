@@ -27,7 +27,8 @@ export default function BinarizePage() {
   };
 
   return (
-    <div>
+    <main>
+      <div>
       <h1>Binarize Video</h1>
 
       {/* Selected video player at the top */}
@@ -49,8 +50,9 @@ export default function BinarizePage() {
       <button onClick={handleGoToProcess}>
         Go to Process Page
       </button>
+    </div>
 
       <Footer />
-    </div>
+    </main>
   );
 }
