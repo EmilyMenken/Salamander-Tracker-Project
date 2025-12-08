@@ -33,6 +33,8 @@ main {
   padding: 2rem;
   width: auto;
   margin: 0 auto;
+
+  padding-bottom:0;
 }
 
 div {
@@ -354,11 +356,11 @@ nav h2 {
 /* ================================
    ENSURE PAGE TEXT IS DARK PURPLE
    (EXCLUDE NAVBAR & FOOTER)
-================================= */
+================================= /
 
-/* All text inside main should be dark purple */
-main,
-main * {
+/ All text inside main except footer /
+main :not(.footer),
+main :not(.footer) {
   color: var(--dark-purple) !important;
 }
 
@@ -378,4 +380,20 @@ main * {
 #binarized-thumbnail h4,
 #select-video {
   color: var(--dark-purple);
+}
+
+footer{
+
+  background: var(--dark-purple);
+  color: var(--lavender);
+  text-align: center;
+  box-shadow: 0 0 12px var(--yellow-orange);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;       /* span the full width of the viewport */
+  padding: 1rem 0;   /* vertical padding */
+  margin: auto;   
 }

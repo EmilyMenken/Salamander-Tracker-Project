@@ -79,8 +79,6 @@ export default function DashboardPage() {
         </div>
       )}
 
-      <Footer />
-
     </main>
   );
 }
