@@ -89,7 +89,10 @@ export default function ProcessPage() {
 
       {job.result && (
         <p>
-          <a href={job.result} target="_blank" rel="noopener noreferrer">
+          <a
+            href={`http://localhost:3000/results/${job.result.split('/').pop()}`}
+            target="_blank"
+            rel="noopener noreferrer">
             Download Result
           </a>
         </p>
