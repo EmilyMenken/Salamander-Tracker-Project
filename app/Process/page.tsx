@@ -103,10 +103,4 @@ export default function ProcessPage() {
     </div>
 
   );
-
-
-      <Footer />
-
-    </main>
-  );
 }

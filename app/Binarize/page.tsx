@@ -29,7 +29,7 @@ export default function BinarizePage() {
   return (
     <main>
       <div>
-      <h1>Binarize Video</h1>
+      <h1 id="binarize">Binarize Video</h1>
 
       <Color
         color={color}

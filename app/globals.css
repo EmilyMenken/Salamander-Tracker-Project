@@ -102,12 +102,11 @@ button:disabled {
 select,
 input,
 textarea {
-  background: white;
+  background: var(--lavender);
   border: 2px solid var(--dark-purple);
   padding: 0.5rem 0.7rem;
   border-radius: 6px;
   font-size: 1rem;
-  color: var(--dark-purple);
   margin-top: 0.25rem;
   transition: border-color 0.2s ease, transform 0.2s ease;
 }
@@ -203,17 +202,35 @@ nav h2 {
 .thumbnail-row {
   display: flex;
   justify-content: left;
-  align-items: center;
-  gap: 20px;
-  margin-top: 20px;
+  align-items: flex-start;
+  gap: 2rem;
+  margin-top: 2rem;
 }
 
 #og-thumbnail,
 #binarized-thumbnail {
-  max-width: 300px;
-  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 350px;       /* optional: constrain the block width */
 }
 
+#og-thumbnail h4,
+#binarized-thumbnail h4 {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  color: var(--dark-purple);
+}
+
+#og-thumbnail img,
+#binarized-thumbnail img {
+  max-width: 400px;
+  width: 100%;
+  height: auto;
+}
+
+
+/* ==================== */
 /* select-video  */
 #select-video {
   font-size: 1.3rem;      /* slightly larger for emphasis */
@@ -254,6 +271,9 @@ nav h2 {
 /* ================================
    BINARIZE PAGE SPACING
 ================================= */
+#binarize {
+  padding-bottom: 2rem;
+}
 
 /* Space between video player and controls */
 .binarize-video {
@@ -310,4 +330,31 @@ nav h2 {
   font-weight: bold;
 }
 
+/* ================================
+   ENSURE PAGE TEXT IS DARK PURPLE
+   (EXCLUDE NAVBAR & FOOTER)
+================================= */
 
+/* All text inside main should be dark purple */
+main,
+main * {
+  color: var(--dark-purple) !important;
+}
+
+/* Specific page classes for extra assurance */
+.binarize-controls,
+.color-controls,
+.threshold-controls,
+.thumbnail-row,
+.process-page,
+.process-page p,
+.process-page h1,
+.process-page h2,
+.process-page h3,
+.process-page h4,
+.process-page h5,
+#og-thumbnail h4,
+#binarized-thumbnail h4,
+#select-video {
+  color: var(--dark-purple);
+}
