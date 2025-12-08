@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Color from "../components/Color";
 import Thumbnail from "../components/Thumbnail";
+import Footer from "../components/Footer";
 
 export default function BinarizePage() {
   const searchParams = useSearchParams();
@@ -48,6 +49,8 @@ export default function BinarizePage() {
       <button onClick={handleGoToProcess}>
         Go to Process Page
       </button>
+
+      <Footer />
     </div>
   );
 }

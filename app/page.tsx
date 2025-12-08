@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import UsageInstructions from "./components/UsageInstructions";
+import Footer from "./components/Footer";
 
 type Video = {
   id: string;
@@ -77,6 +78,9 @@ export default function DashboardPage() {
           </button>
         </div>
       )}
+
+      <Footer />
+
     </main>
   );
 }
