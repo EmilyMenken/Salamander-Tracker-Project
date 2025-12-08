@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import Footer from "../components/Footer";
 
 type Job = {
   jobId: string;
@@ -15,25 +16,22 @@ type Job = {
 export default function ProcessPage() {
   const searchParams = useSearchParams();
   
-  // Accept original full video URL
   const videoUrl = searchParams.get("videoUrl");
-
-  // Extract file name from it
   const videoName = videoUrl ? videoUrl.split("/").pop() : null;
 
-  const targetColor = searchParams.get("targetColor") || "#ff0000";
-  const threshold = Number(searchParams.get("threshold") || 100);
+  const targetColor = searchParams.get("targetColor");
+  const thresholdStr = searchParams.get("threshold");
+  const threshold = thresholdStr ? Number(thresholdStr) : null;
 
   const [job, setJob] = useState<Job | null>(null);
   const [status, setStatus] = useState("starting...");
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (!videoName) {
-      setError("No video name provided");
-      return;
-    }
+  // --- Early returns for missing inputs ---
+  if (!videoName) return <div>No video selected</div>;
+  if (!targetColor || threshold === null) return <div>No target color or threshold selected</div>;
 
+  useEffect(() => {
     let interval: NodeJS.Timer;
 
     const startJob = async () => {
@@ -106,4 +104,9 @@ export default function ProcessPage() {
 
   );
 
+
+      <Footer />
+
+    </main>
+  );
 }

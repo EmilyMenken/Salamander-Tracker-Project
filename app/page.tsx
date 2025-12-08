@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import UsageInstructions from "./components/UsageInstructions";
+import Footer from "./components/Footer";
 
 type Video = {
   id: string;
@@ -59,7 +60,6 @@ export default function DashboardPage() {
             <select
               value={selectedVideoId}
               onChange={e => setSelectedVideoId(e.target.value)}
-              style={{ marginLeft: "10px" }}
             >
               <option value="">Choose a video</option>
               {videos.map(v => (
@@ -72,13 +72,15 @@ export default function DashboardPage() {
 
           <button
             onClick={handleGoToBinarize}
-            style={{ marginLeft: "10px" }}
             disabled={!selectedVideoId}
           >
             Go to Binarize
           </button>
         </div>
       )}
+
+      <Footer />
+
     </main>
   );
 }

@@ -21,7 +21,7 @@ export default function VideoList({
         <div
           key={v.id}
         >
-          <video src={v.url} width={300} controls style={{ marginRight: "10px" }} />
+          <video src={v.url} />
           <p>{v.name}</p>
           {onRemove && (
             <button onClick={() => onRemove(v.id)}>
