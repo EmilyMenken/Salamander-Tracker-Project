@@ -31,8 +31,13 @@ html, body {
 ================================ */
 main {
   padding: 2rem;
-  max-width: 960px;
+  width: auto;
   margin: 0 auto;
+}
+
+div {
+  max-width: 960px;
+  margin: auto;
 }
 
 /* ================================
@@ -153,8 +158,12 @@ main > div:hover {
 /* ================================
    NAVBAR
 ================================ */
+/* ================================
+   NAVBAR FIX
+================================= */
 nav {
   background: var(--dark-purple);
+  margin: 0;
   padding: 1rem 2rem;
   display: flex;
   align-items: center;
@@ -168,9 +177,20 @@ nav {
   display: flex;
   align-items: center;
   gap: 1.5rem;
-  flex-shrink: 0;
 }
 
+/* Logo inside left */
+.nav-left img {
+  height: 48px;
+  width: 48px;
+  object-fit: contain;
+  background: var(--yellow-orange);
+  border-radius: 50%;
+  padding: 4px;
+  box-sizing: border-box;
+}
+
+/* Nav links on left */
 .nav-left a {
   color: var(--peach);
   text-decoration: none;
@@ -193,17 +213,7 @@ nav h2 {
   font-weight: 700;
   text-align: center;
   font-size: 1.5rem;
-}
-
-/* Navbar logo background circle */
-nav img {
-  height: 48px;
-  width: 48px;           /* make width equal height for a circle */
-  object-fit: contain;
-  background: var(--yellow-orange);
-  border-radius: 50%;    /* makes it circular */
-  padding: 4px;          /* optional: space between image and circle */
-  box-sizing: border-box;
+  pointer-events: none; /* ensures h2 does not block links */
 }
 
 
