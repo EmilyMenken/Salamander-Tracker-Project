@@ -14,7 +14,13 @@ type Job = {
 
 export default function ProcessPage() {
   const searchParams = useSearchParams();
-  const videoName = searchParams.get("videoName");
+  
+  // Accept original full video URL
+  const videoUrl = searchParams.get("videoUrl");
+
+  // Extract file name from it
+  const videoName = videoUrl ? videoUrl.split("/").pop() : null;
+
   const targetColor = searchParams.get("targetColor") || "#ff0000";
   const threshold = Number(searchParams.get("threshold") || 100);
 
@@ -23,18 +29,19 @@ export default function ProcessPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!videoName) return;
+    if (!videoName) {
+      setError("No video name provided");
+      return;
+    }
 
     let interval: NodeJS.Timer;
 
     const startJob = async () => {
       try {
-        // Send full hex color (with #) to backend
         const res = await fetch(
-          `http://localhost:3000/api/process/${videoName}?targetColor=${encodeURIComponent(targetColor)}&threshold=${threshold}`,
+          `http://localhost:3000/api/process/${encodeURIComponent(videoName)}?targetColor=${encodeURIComponent(targetColor)}&threshold=${threshold}`,
           { method: "POST" }
         );
-        console.log(res);
 
         if (!res.ok) {
           const text = await res.text();
@@ -45,7 +52,6 @@ export default function ProcessPage() {
         setJob(data);
         setStatus(data.status);
 
-        // Poll status every 2 seconds
         interval = setInterval(async () => {
           try {
             const statusRes = await fetch(
@@ -80,6 +86,7 @@ export default function ProcessPage() {
     <div>
       <h1>Processing Video: {job.fileName}</h1>
       <p>Status: {status}</p>
+
       {job.result && (
         <p>
           <a href={job.result} target="_blank" rel="noopener noreferrer">
