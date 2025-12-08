@@ -26,8 +26,6 @@ html, body {
   overflow-x: hidden;
 }
 
-/* (BUBBLE EFFECT REMOVED) */
-
 /* ================================
    LAYOUT
 ================================ */
@@ -136,7 +134,7 @@ label {
 }
 
 /* ================================
-   CARDS
+   CARDS — MOVEMENT REMOVED
 ================================= */
 main > div {
   background: var(--peach);
@@ -144,11 +142,14 @@ main > div {
   border-radius: 16px;
   margin-bottom: 1.8rem;
   box-shadow: 0 0 14px var(--yellow-orange);
-  transition: transform 0.25s ease;
+
+  /* ❌ REMOVE movement */
+  transition: none;
 }
 
 main > div:hover {
-  transform: translateY(-4px);
+  /* ❌ Remove hover movement */
+  transform: none;
 }
 
 /* ================================
@@ -179,4 +180,19 @@ nav a {
 nav a:hover {
   color: var(--yellow-orange);
   transform: scale(1.05);
+}
+
+
+/* thumbnail imgs */
+.thumbnail-row {
+  display: flex;
+  justify-content: left;   /* centers them horizontally */
+  align-items: center;       /* aligns them vertically */
+  gap: 20px;                 /* space between the images */
+  margin-top: 20px;
+}
+
+#og-thumbnail,
+#binarized-thumbnail {
+  max-width: 300px;
 }
