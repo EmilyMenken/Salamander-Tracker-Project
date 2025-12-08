@@ -195,6 +195,17 @@ nav h2 {
   font-size: 1.5rem;
 }
 
+/* Navbar logo background circle */
+nav img {
+  height: 48px;
+  width: 48px;           /* make width equal height for a circle */
+  object-fit: contain;
+  background: var(--yellow-orange);
+  border-radius: 50%;    /* makes it circular */
+  padding: 4px;          /* optional: space between image and circle */
+  box-sizing: border-box;
+}
+
 
 /* ================================
    THUMBNAIL IMAGES SIDE-BY-SIDE
