@@ -29,18 +29,33 @@ export default function Color({
     if (onThresholdChange) onThresholdChange(localThreshold);
   }, [localThreshold]);
 
+  // ---- Eyedropper Function ----
+  const useEyeDropper = async () => {
+    if ("EyeDropper" in window) {
+      const eyeDropper = new (window as any).EyeDropper();
+      try {
+        const result = await eyeDropper.open();
+        if (result?.sRGBHex) setLocalColor(result.sRGBHex);
+      } catch {
+        console.error("Eyedropper canceled");
+      }
+    } else {
+      alert("Your browser does not support the EyeDropper API.");
+    }
+  };
+
   return (
     <div>
       <HexColorPicker color={localColor} onChange={setLocalColor} />
 
+      <button onClick={useEyeDropper}>
+        Pick From Screen
+      </button>
+
       <div>
         <label>
           Hex Color:
-          <HexColorInput
-            color={localColor}
-            onChange={setLocalColor}
-            prefixed
-          />
+          <HexColorInput color={localColor} onChange={setLocalColor} prefixed />
         </label>
 
         <label>
