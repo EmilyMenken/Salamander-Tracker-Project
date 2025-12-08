@@ -52,8 +52,6 @@ export default function BinarizePage() {
         Go to Process Page
       </button>
     </div>
-
-      <Footer />
     </main>
   );
 }

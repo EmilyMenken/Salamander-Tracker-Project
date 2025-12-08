@@ -375,7 +375,6 @@ footer{
   background: var(--dark-purple);
   color: var(--lavender);
   text-align: center;
-  box-shadow: 0 0 12px var(--yellow-orange);
 
   display: flex;
   align-items: center;
